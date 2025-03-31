@@ -16,17 +16,19 @@ class _InitialScreenState extends State<InitialScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: const Text('Tarefas'),
+        title: const Text('Tarefas', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.blue,
       ),
       body: ListView(
         children: TaskInherited.of(context).tasklist,
+        padding: EdgeInsets.only(top: 8, bottom: 70),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FormScreen(),
+              builder: (contextNew) => FormScreen(taskContext: context,),
             ),
           );
         },

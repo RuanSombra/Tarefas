@@ -1,9 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:nosso_primeiro_projeto/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({super.key});
+  const FormScreen({super.key, required this.taskContext});
+
+  final BuildContext taskContext;
 
   @override
   State<FormScreen> createState() => _FormScreenState();
@@ -14,6 +15,22 @@ class _FormScreenState extends State<FormScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController dificultyController = TextEditingController();
   TextEditingController imageController = TextEditingController();
+
+  bool valueValidator(String? value){
+    if(value != null && value.isEmpty){
+      return true;
+    }
+    return false;
+  }
+
+  bool difficultyValidator(String? value){
+    if(value != null && value.isEmpty){
+      if(int.parse(value) > 5 || int.parse(value) < 1){
+        return true;
+      }
+    }
+    return false;
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -48,8 +65,8 @@ class _FormScreenState extends State<FormScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        validator: (String? values){
-                          if(values != null && values.isEmpty){
+                        validator: (String? value){
+                          if(valueValidator(value)){
                             return 'Insira o nome da Tarefa';
                           }
                           else {
@@ -73,7 +90,7 @@ class _FormScreenState extends State<FormScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         validator: (value){
-                          if(value!.isEmpty || int.parse(value) > 5 || int.parse(value) < 1)  {
+                          if(difficultyValidator(value))  {
                             return 'Insira uma dificuldade entre 1 e 5';
                           }
                           else {
@@ -98,11 +115,10 @@ class _FormScreenState extends State<FormScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         validator: (value){
-                          if(value!.isEmpty){
+                          if(valueValidator(value)){
                             'Insira uma url da imagem valida';
                           }
                           return null;
-
                         },
                         keyboardType: TextInputType.url,
                         controller: imageController,
@@ -153,12 +169,13 @@ class _FormScreenState extends State<FormScreen> {
                       color: Colors.white,
                     ),),
                     onPressed: (){
-
                       if(_formKey.currentState!.validate()){
-                        print(nameController.text);
-                        print(dificultyController.text);
-                        print(imageController.text);
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Printando nova tarefa'), width: 200,),);
+                        // print(nameController.text);
+                        // print(dificultyController.text);
+                        // print(imageController.text);
+                        TaskInherited.of(widget.taskContext).newTask(nameController.text, imageController.text, int.parse(dificultyController.text));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Criando uma nova tarefa')),);
+                        Navigator.pop(context);
                       }
                     },
                   ),
