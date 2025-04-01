@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 import 'difficulty.dart';
 
 class Task extends StatefulWidget {
@@ -15,7 +16,6 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-
   bool assetOrNetwork() {
     if (widget.foto.contains('http')) {
       return false;
@@ -81,34 +81,44 @@ class _TaskState extends State<Task> {
                     ),
                     SizedBox(
                       width: 65,
-                      height: 60,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          iconColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Icon(Icons.arrow_drop_up),
-                            Text(
-                              'UP',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
+
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              iconColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                          ],
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            widget.nivel++;
-                          });
-                        },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Icon(Icons.arrow_drop_up),
+                                Text(
+                                  'UP',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                widget.nivel++;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              TaskDao().delete(widget.nome);
+                            },
+                            icon: Icon(Icons.delete, size: 20, color: Colors.red,),
+                          ),
+                        ],
                       ),
                     ),
                   ],
